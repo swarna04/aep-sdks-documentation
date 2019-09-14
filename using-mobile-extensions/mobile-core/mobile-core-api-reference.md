@@ -349,6 +349,109 @@ ACPCore.collectLaunchInfo(userInfo)
 {% endtab %}
 {% endtabs %}
 
+### Collect message information
+
+You can provide the message information to the SDK from various points in your application.
+
+{% hint style="info" %}
+If Campaign extension is enabled in your SDK, collecting message data results in a Campaign track request being sent. Other extensions in the SDK might use the collected data, for example, as a rule condition for an In-App Message.
+{% endhint %}
+
+{% tabs %}
+{% tab title="Android" %}
+**Java**
+
+This method should be called to support the following use cases:
+
+* Tracking Push Message receive and click.
+* Tracking Local Notification receive and click.
+
+For scenarios where the application is launched as a result of notification click, `collectLaunchInfo` API will be invoked with the target Activity and message data will be extracted from the Intent extras.
+
+#### collectMessageInfo
+
+**Syntax**
+
+```java
+public static void collectMessageInfo(final Map<String, Object> messageInfo);
+```
+
+**Example**
+
+```java
+Map<String, Object> messageInfo = new HashMap<String, Object>();
+messageInfo.put("deliveryId", "5c5c");
+messageInfo.put("broadlogId", "h1234");
+messageInfo.put("action", "1")
+
+MobileCore.collectMessageInfo(messageInfo);
+```
+{% endtab %}
+
+{% tab title="iOS" %}
+**Objective-C**
+
+This method should be called to support the following use cases:
+
+*  Tracking remote or local notification receive
+    *  From `userNotificationCenter:willPresentNotification:withCompletionHandler:`
+*  Tracking remote or local notification click-throughs
+    *  From `userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:`
+
+For scenarios where the app is launched as a result of notification click, use `collectLaunchInfo:` API.
+
+#### collectMessageInfo
+
+**Syntax**
+
+```text
++ (void) collectMessageInfo: (nonnull NSDictionary*) messageInfo;
+```
+
+**Example**
+
+```text
+NSDictionary *messageInfo = @{
+@"deliveryId" : @"5c5c",
+@"broadlogId" : @"h1234",
+@"action" : @"1"
+};
+[ACPCore collectMessageInfo:messageInfo];
+```
+
+**Swift**
+
+This method should be called to support the following use cases:
+
+*  Tracking remote or local notification receive
+    *  From `userNotificationCenter:willPresentNotification:withCompletionHandler:`
+*  Tracking remote or local notification click-throughs
+    *  From `userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:`
+
+For scenarios where the app is launched as a result of notification click, you may also use `collectLaunchInfo:` API.
+
+#### collectMessageInfo
+
+**Syntax**
+
+```swift
++ (void) collectMessageInfo: (nonnull NSDictionary*) messageInfo;
+```
+
+**Example**
+
+```swift
+let messageInfo: NSDictionary = [
+"deliveryId" : "5c5c",
+"broadlogId" : "h1234",
+"action" : "1"
+]
+ACPCore.collectMessageInfo(messageInfo)
+```
+{% endtab %}
+{% endtabs %}
+
+
 ## Set Icons for local notification
 
 Set the small and large icons that will be used for notifications that are created by the SDK. The small icon appears in the status bar and is the secondary image that is displayed when the user sees the complete notification in the notification center. The large icon is the primary image that is displayed when the user sees the complete notification in the notification center.
